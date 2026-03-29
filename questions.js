@@ -1,5 +1,9 @@
 // Full question bank — Lebanese Arabic → Swedish
-// 58 questions; 15 are selected daily via a seeded shuffle
+// 81 questions; 15 are selected daily via a seeded shuffle
+//
+// Phonetics use Lebanese chat alphabet:
+//   2 = ء / ق (glottal stop)   3 = ع (ain)   5 = خ (kha)
+//   6 = ط (emphatic t)         7 = ح (ha)
 
 const ALL_QUESTIONS = [
   {
@@ -7,14 +11,14 @@ const ALL_QUESTIONS = [
     roman: "yalla",
     options: ["God morgon", "Kör igång / Kom igen", "Tack", "Förlåt"],
     answer: 1,
-    note: "Ett av de vanligaste orden på libanesiska — det betyder 'kom igen', 'kör på' eller 'skynda dig'."
+    note: "Ett av de vanligaste orden på libanesiska — 'yalla' betyder 'kom igen', 'kör på' eller 'skynda dig'."
   },
   {
     arabic: "كتير",
-    roman: "ktīr",
+    roman: "ktir",
     options: ["Lite", "Aldrig", "Mycket / Väldigt", "Ibland"],
     answer: 2,
-    note: "'Ktīr' betyder 'mycket' eller 'väldigt'. T.ex. 'ktīr mniḥ' = väldigt bra."
+    note: "'Ktir' betyder 'mycket' eller 'väldigt'. T.ex. 'ktir mni7' = väldigt bra."
   },
   {
     arabic: "شو",
@@ -25,73 +29,73 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "منيح",
-    roman: "mniḥ",
+    roman: "mni7",
     options: ["Dålig", "Bra / Okej", "Konstig", "Trött"],
     answer: 1,
-    note: "'Mniḥ' betyder bra eller okej. Ett vanligt svar på 'Kifak?' (Hur mår du?)."
+    note: "'Mni7' betyder bra eller okej. Ett vanligt svar på 'Kifak?' (Hur mår du?)."
   },
   {
     arabic: "هلق",
-    roman: "halla'",
+    roman: "halla2",
     options: ["Igår", "Senare", "Nu", "Alltid"],
     answer: 2,
-    note: "'Halla'' betyder 'nu'. Motsvarar Modern Standardarabiska 'al-ān'."
+    note: "'Halla2' betyder 'nu'. Motsvarar Modern Standardarabiska 'al-ān'."
   },
   {
     arabic: "عنجد",
-    roman: "'anjad",
+    roman: "3anjad",
     options: ["Kanske", "Verkligen? / Seriöst?", "Självklart", "Jag vet inte"],
     answer: 1,
-    note: "'Anjad' betyder 'verkligen' eller 'seriöst'. Används både som påstående och fråga."
+    note: "'3anjad' betyder 'verkligen' eller 'seriöst'. Används både som påstående och fråga."
   },
   {
     arabic: "بدّي",
-    roman: "baddī",
+    roman: "baddi",
     options: ["Jag vet inte", "Jag glömde", "Jag vill", "Jag kom"],
     answer: 2,
-    note: "'Baddī' betyder 'jag vill'. 'Baddak' = du vill, 'baddha' = hon vill."
+    note: "'Baddi' betyder 'jag vill'. 'Baddak' = du vill, 'baddha' = hon vill."
   },
   {
     arabic: "تعبان",
-    roman: "ta'bān",
+    roman: "ta3ban",
     options: ["Glad", "Hungrig", "Trött / Sjuk", "Uttråkad"],
     answer: 2,
-    note: "'Ta'bān' betyder trött eller sjuk. 'Ana ta'bān' = Jag är trött."
+    note: "'Ta3ban' betyder trött eller sjuk. 'Ana ta3ban' = Jag är trött."
   },
   {
     arabic: "شاطر",
-    roman: "shāṭer",
+    roman: "sha6er",
     options: ["Lat", "Duktig / Smart", "Otrevlig", "Tyst"],
     answer: 1,
-    note: "'Shāṭer' betyder duktig eller bra jobbat. Föräldrar säger det ofta för att berömma barn."
+    note: "'Sha6er' betyder duktig eller bra jobbat. Föräldrar säger det ofta för att berömma barn."
   },
   {
     arabic: "مش",
     roman: "mish",
     options: ["Ja", "Också", "Inte / Är inte", "Men"],
     answer: 2,
-    note: "'Mish' är negationsprefixet. 'Mish mniḥ' = inte bra."
+    note: "'Mish' är negationsprefixet. 'Mish mni7' = inte bra."
   },
   {
     arabic: "فوت",
-    roman: "fūt",
+    roman: "fut",
     options: ["Gå ut", "Kom in / Gå in", "Sätt dig", "Titta"],
     answer: 1,
-    note: "'Fūt' betyder 'kom in' eller 'gå in'. 'Fūt la jouwwa' = kom in."
+    note: "'Fut' betyder 'kom in' eller 'gå in'. 'Fut la jouwwa' = kom in."
   },
   {
     arabic: "صحتين",
-    roman: "saḥtēn",
+    roman: "sa7ten",
     options: ["När någon nyser", "Som en skål / efter en måltid", "God natt", "Grattis"],
     answer: 1,
-    note: "'Saḥtēn' betyder bokstavligen 'två hälsor'. Sägs som en skål eller när någon är klar med sin mat."
+    note: "'Sa7ten' betyder bokstavligen 'två hälsor'. Sägs som en skål eller när någon är klar med sin mat."
   },
   {
     arabic: "روق",
-    roman: "rūq",
+    roman: "ruu2",
     options: ["Skynda dig", "Var tyst", "Lugna ner dig / Ta det lugnt", "Gå iväg"],
     answer: 2,
-    note: "'Rūq' betyder slappna av eller lugna ner. 'Rūq shwayy' = ta det lite lugnt."
+    note: "'Ruu2' betyder slappna av eller lugna ner. 'Ruu2 shwayy' = ta det lite lugnt."
   },
   {
     arabic: "بكرا",
@@ -102,17 +106,17 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "كيفك",
-    roman: "kīfak",
+    roman: "kifak",
     options: ["Var är du?", "Vad heter du?", "Hur mår du?", "Vad vill du ha?"],
     answer: 2,
-    note: "'Kīfak' (mask.) / 'Kīfik' (fem.) betyder 'Hur mår du?' — den klassiska libanesiska hälsningen."
+    note: "'Kifak' (mask.) / 'Kifik' (fem.) betyder 'Hur mår du?' — den klassiska libanesiska hälsningen."
   },
   {
     arabic: "حبيبي",
-    roman: "ḥabībī",
+    roman: "7abibi",
     options: ["Fiende", "Granne", "Älskling / Vän", "Kollega"],
     answer: 2,
-    note: "'Ḥabībī' (mask.) / 'Ḥabībti' (fem.) betyder 'älskling' eller 'kära vän'. Används väldigt ofta."
+    note: "'7abibi' (mask.) / '7abibti' (fem.) betyder 'älskling' eller 'kära vän'. Används väldigt ofta."
   },
   {
     arabic: "انشالله",
@@ -123,17 +127,17 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "يعني",
-    roman: "ya'ni",
+    roman: "ya3ni",
     options: ["Verkligen", "Aldrig", "Det vill säga / Typ", "Dessutom"],
     answer: 2,
-    note: "'Ya'ni' används som 'det vill säga', 'liksom' eller 'typ' — ett vanligt fyllnadsord."
+    note: "'Ya3ni' används som 'det vill säga', 'liksom' eller 'typ' — ett vanligt fyllnadsord."
   },
   {
     arabic: "زاكي",
-    roman: "zāki",
+    roman: "zaki",
     options: ["Dyrt", "Läckert / Gott", "Bittert", "Gammalt"],
     answer: 1,
-    note: "'Zāki' betyder läckert eller gott om mat. 'Ktīr zāki' = väldigt gott!"
+    note: "'Zaki' betyder läckert eller gott om mat. 'Ktir zaki' = väldigt gott!"
   },
   {
     arabic: "برّا",
@@ -144,31 +148,31 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "ليش",
-    roman: "lēsh",
+    roman: "lesh",
     options: ["Hur", "Varför", "När", "Var"],
     answer: 1,
-    note: "'Lēsh' är det libanesiska ordet för 'varför'. 'Lēsh hēk?' = Varför så?"
+    note: "'Lesh' är det libanesiska ordet för 'varför'. 'Lesh heyk?' = Varför så?"
   },
   {
     arabic: "وين",
-    roman: "wēn",
+    roman: "wayn",
     options: ["Vem", "Vad", "Var", "Hur"],
     answer: 2,
-    note: "'Wēn' är det libanesiska ordet för 'var'. 'Wēn inta?' = Var är du?"
+    note: "'Wayn' är det libanesiska ordet för 'var'. 'Wayn inta?' = Var är du?"
   },
   {
     arabic: "مين",
-    roman: "mīn",
+    roman: "meen",
     options: ["Vad", "Vem", "Var", "Varför"],
     answer: 1,
-    note: "'Mīn' är det libanesiska ordet för 'vem'. 'Mīn huwwe?' = Vem är han?"
+    note: "'Meen' är det libanesiska ordet för 'vem'. 'Meen huwwe?' = Vem är han?"
   },
   {
     arabic: "كمان",
-    roman: "kamān",
+    roman: "kaman",
     options: ["Aldrig", "Men", "Också / Dessutom", "Utan"],
     answer: 2,
-    note: "'Kamān' betyder 'också' eller 'dessutom'. 'Ana kamān' = Jag med / Jag också."
+    note: "'Kaman' betyder 'också' eller 'dessutom'. 'Ana kaman' = Jag med / Jag också."
   },
   {
     arabic: "بس",
@@ -179,17 +183,17 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "هيك",
-    roman: "hēk",
+    roman: "heyk",
     options: ["Ingenstans", "Ingenting", "Aldrig", "Så / Sådär"],
     answer: 3,
-    note: "'Hēk' betyder 'så' eller 'sådär'. 'Lēsh hēk?' = Varför så?"
+    note: "'Heyk' betyder 'så' eller 'sådär'. 'Lesh heyk?' = Varför så?"
   },
   {
     arabic: "عادي",
-    roman: "'ādi",
+    roman: "3adi",
     options: ["Speciellt", "Normalt / Det är okej", "Omöjligt", "Oväntat"],
     answer: 1,
-    note: "'Ādi' betyder normalt eller det är okej. 'Ādi, mā fi moshkle' = Det är okej, inget problem."
+    note: "'3adi' betyder normalt eller det är okej. '3adi, ma fi moshkle' = Det är okej, inget problem."
   },
   {
     arabic: "شوي",
@@ -200,143 +204,143 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "فاضي",
-    roman: "fādi",
+    roman: "fadi",
     options: ["Upptagen", "Ledig / Inte upptagen", "Trött", "Arg"],
     answer: 1,
-    note: "'Fādi' (mask.) / 'Fādye' (fem.) betyder ledig eller inte upptagen. 'Inta fādi?' = Är du ledig?"
+    note: "'Fadi' (mask.) / 'Fadye' (fem.) betyder ledig eller inte upptagen. 'Inta fadi?' = Är du ledig?"
   },
   {
     arabic: "مضبوط",
-    roman: "maḍbūṭ",
+    roman: "madbuu6",
     options: ["Fel", "Trasig", "Rätt / Korrekt", "Konstig"],
     answer: 2,
-    note: "'Maḍbūṭ' betyder rätt, korrekt eller precis. Används för att bekräfta att något stämmer."
+    note: "'Madbuu6' betyder rätt, korrekt eller precis. Används för att bekräfta att något stämmer."
   },
   {
     arabic: "خلص",
-    roman: "khalaṣ",
+    roman: "5alas",
     options: ["Börja", "Vänta", "Klart / Färdigt", "Fortsätt"],
     answer: 2,
-    note: "'Khalaṣ' betyder klart eller färdigt. Kan också betyda 'det är över' eller 'låt det bero'."
+    note: "'5alas' betyder klart eller färdigt. Kan också betyda 'det är över' eller 'låt det bero'."
   },
   {
     arabic: "مبسوط",
-    roman: "mabsūṭ",
+    roman: "mabsuu6",
     options: ["Ledsen", "Arg", "Glad / Nöjd", "Rädd"],
     answer: 2,
-    note: "'Mabsūṭ' (mask.) / 'Mabsūṭa' (fem.) betyder glad eller nöjd. 'Ana mabsūṭ ktīr' = Jag är väldigt glad."
+    note: "'Mabsuu6' (mask.) / 'Mabsuu6a' (fem.) betyder glad eller nöjd. 'Ana mabsuu6 ktir' = Jag är väldigt glad."
   },
   {
     arabic: "زعلان",
-    roman: "za'lān",
+    roman: "za3lan",
     options: ["Glad", "Ledsen / Upprörd", "Förvånad", "Stolt"],
     answer: 1,
-    note: "'Za'lān' (mask.) / 'Za'lāne' (fem.) betyder ledsen eller upprörd. 'Lēsh za'lān?' = Varför är du ledsen?"
+    note: "'Za3lan' (mask.) / 'Za3lane' (fem.) betyder ledsen eller upprörd. 'Lesh za3lan?' = Varför är du ledsen?"
   },
   {
     arabic: "قديش",
-    roman: "addēsh",
+    roman: "addeish",
     options: ["Varför", "Hur länge", "Hur mycket / Hur många", "Vad"],
     answer: 2,
-    note: "'Addēsh' betyder 'hur mycket' eller 'hur många'. 'Addēsh el-taman?' = Hur mycket kostar det?"
+    note: "'Addeish' betyder 'hur mycket' eller 'hur många'. 'Addeish el-taman?' = Hur mycket kostar det?"
   },
   {
     arabic: "طيّب",
-    roman: "ṭayyib",
+    roman: "6ayyib",
     options: ["Nej", "Kanske", "Okej / Bra", "Nej tack"],
     answer: 2,
-    note: "'Ṭayyib' används som en bekräftelse, ungefär som 'okej' eller 'alright' på svenska."
+    note: "'6ayyib' används som en bekräftelse, ungefär som 'okej' eller 'alright' på svenska."
   },
   {
     arabic: "كلّو",
     roman: "killo",
     options: ["Ingenting", "Lite", "Allt / Alla", "Några"],
     answer: 2,
-    note: "'Killo' betyder 'allt' eller 'alla'. 'Killo tamām' = allt är bra."
+    note: "'Killo' betyder 'allt' eller 'alla'. 'Killo tamam' = allt är bra."
   },
   {
     arabic: "بحبك",
-    roman: "biḥibbak",
+    roman: "bi7ibbak",
     options: ["Jag saknar dig", "Jag hatar dig", "Jag älskar dig", "Jag respekterar dig"],
     answer: 2,
-    note: "'Biḥibbak' (till man) / 'Biḥibbik' (till kvinna) betyder 'jag älskar dig'."
+    note: "'Bi7ibbak' (till man) / 'Bi7ibbik' (till kvinna) betyder 'jag älskar dig'."
   },
   {
     arabic: "روح",
-    roman: "rūḥ",
+    roman: "ruu7",
     options: ["Stanna", "Sitt ner", "Gå / Dra iväg", "Kom tillbaka"],
     answer: 2,
-    note: "'Rūḥ' är imperativ för 'gå' eller 'dra iväg'. 'Rūḥ, yalla' = Gå nu, skynda dig."
+    note: "'Ruu7' är imperativ för 'gå' eller 'dra iväg'. 'Ruu7, yalla' = Gå nu, skynda dig."
   },
   {
     arabic: "تعا",
-    roman: "ta'a",
+    roman: "ta3a",
     options: ["Gå bort", "Titta", "Lyssna", "Kom hit"],
     answer: 3,
-    note: "'Ta'a' (mask.) / 'Ta'i' (fem.) är imperativ för 'kom hit'. 'Ta'a hon' = Kom hit."
+    note: "'Ta3a' (mask.) / 'Ta3i' (fem.) är imperativ för 'kom hit'. 'Ta3a hon' = Kom hit."
   },
   {
     arabic: "مرحبا",
-    roman: "marḥaba",
+    roman: "mar7aba",
     options: ["Hej då", "God natt", "Hej / Välkommen", "Ursäkta"],
     answer: 2,
-    note: "'Marḥaba' är den vanliga hälsningen på libanesiska, som 'hej' eller 'välkommen'."
+    note: "'Mar7aba' är den vanliga hälsningen på libanesiska, som 'hej' eller 'välkommen'."
   },
   {
     arabic: "اشتقتلك",
-    roman: "ishtaqtillak",
+    roman: "ishta2tillak",
     options: ["Jag glömde dig", "Jag förlåter dig", "Jag saknar dig", "Jag behöver dig"],
     answer: 2,
-    note: "'Ishtaqtillak' (till man) / 'Ishtaqtillik' (till kvinna) betyder 'jag saknar dig'."
+    note: "'Ishta2tillak' (till man) / 'Ishta2tillik' (till kvinna) betyder 'jag saknar dig'."
   },
   {
     arabic: "صباح الخير",
-    roman: "ṣabāḥ el-khēr",
+    roman: "saba7 el-5eer",
     options: ["God kväll", "God natt", "God morgon", "Välkommen"],
     answer: 2,
-    note: "'Ṣabāḥ el-khēr' betyder 'god morgon'. Svaret är 'ṣabāḥ el-nūr' (morgon av ljus)."
+    note: "'Saba7 el-5eer' betyder 'god morgon'. Svaret är 'saba7 el-nuur' (morgon av ljus)."
   },
   {
     arabic: "مساء الخير",
-    roman: "masā el-khēr",
+    roman: "masa el-5eer",
     options: ["God morgon", "Hej", "God natt", "God kväll"],
     answer: 3,
-    note: "'Masā el-khēr' betyder 'god kväll'. Svaret är 'masā el-nūr'."
+    note: "'Masa el-5eer' betyder 'god kväll'. Svaret är 'masa el-nuur'."
   },
   {
     arabic: "لأ",
-    roman: "la'",
+    roman: "la2",
     options: ["Ja", "Kanske", "Nej", "Aldrig"],
     answer: 2,
-    note: "'La'' är det libanesiska ordet för 'nej'. Uttals med ett glottalt stopp i slutet."
+    note: "'La2' är det libanesiska ordet för 'nej'. Uttals med ett glottalt stopp i slutet."
   },
   {
     arabic: "آه",
-    roman: "āh",
+    roman: "ah",
     options: ["Nej", "Kanske", "Ja", "Aldrig"],
     answer: 2,
-    note: "'Āh' är det libanesiska ordet för 'ja'. Mer informellt än 'na'am' (standardarabiska)."
+    note: "'Ah' är det libanesiska ordet för 'ja'. Mer informellt än 'na3am' (standardarabiska)."
   },
   {
     arabic: "معلوم",
-    roman: "ma'lūm",
+    roman: "ma3loom",
     options: ["Omöjligt", "Okänt", "Självklart / Givetvis", "Osäkert"],
     answer: 2,
-    note: "'Ma'lūm' betyder självklart eller givetvis. Används för att bekräfta något uppenbart."
+    note: "'Ma3loom' betyder självklart eller givetvis. Används för att bekräfta något uppenbart."
   },
   {
     arabic: "ضروري",
-    roman: "ḍarūri",
+    roman: "daruri",
     options: ["Valfritt", "Nödvändigt / Viktigt", "Omöjligt", "Ovanligt"],
     answer: 1,
-    note: "'Ḍarūri' betyder nödvändigt eller viktigt. 'Ḍarūri trūḥ' = Det är viktigt att du åker."
+    note: "'Daruri' betyder nödvändigt eller viktigt. 'Daruri truu7' = Det är viktigt att du åker."
   },
   {
     arabic: "نحنا",
-    roman: "niḥna",
+    roman: "ni7na",
     options: ["De", "Ni", "Vi", "Jag"],
     answer: 2,
-    note: "'Niḥna' är det libanesiska pronomenet för 'vi'. Standardarabiska är 'naḥnu'."
+    note: "'Ni7na' är det libanesiska pronomenet för 'vi'. Standardarabiska är 'na7nu'."
   },
   {
     arabic: "انتَ",
@@ -347,38 +351,38 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "حكي",
-    roman: "ḥaki",
+    roman: "7aki",
     options: ["Lyssna", "Prata / Tal", "Skriva", "Läsa"],
     answer: 1,
-    note: "'Ḥaki' betyder prata eller tal. 'Ḥkīna' = Vi pratade. 'Shu el-ḥaki?' = Vad är snacket?"
+    note: "'7aki' betyder prata eller tal. '7kina' = Vi pratade. 'Shu el-7aki?' = Vad är snacket?"
   },
   {
     arabic: "بالهنا",
-    roman: "bil-hanā",
+    roman: "bil-hana",
     options: ["Välkommen", "Smaklig måltid", "God tur", "Ta hand om dig"],
     answer: 1,
-    note: "'Bil-hanā' (kort för 'bil-hanā wil-shifā') är 'smaklig måltid'. Sägs vid mat."
+    note: "'Bil-hana' (kort för 'bil-hana wil-shifa') är 'smaklig måltid'. Sägs vid mat."
   },
   {
     arabic: "ع راسي",
-    roman: "'a rāsi",
+    roman: "3a rasi",
     options: ["Jag vet inte", "Det är svårt", "Absolut / Med nöjet är mitt", "Kanske"],
     answer: 2,
-    note: "'A rāsi' betyder bokstavligen 'på mitt huvud'. Används för att visa total villighet att hjälpa."
+    note: "'3a rasi' betyder bokstavligen 'på mitt huvud'. Används för att visa total villighet att hjälpa."
   },
   {
     arabic: "تصبح على خير",
-    roman: "tiṣbaḥ 'ala khēr",
+    roman: "tsba7 3a 5eer",
     options: ["God morgon", "God kväll", "Hej då", "God natt"],
     answer: 3,
-    note: "'Tiṣbaḥ 'ala khēr' är 'god natt'. Bokstavligen 'vakna upp till det goda'."
+    note: "'Tsba7 3a 5eer' är 'god natt'. Bokstavligen 'vakna upp till det goda'."
   },
   {
     arabic: "يسلمو",
-    roman: "yislamu",
+    roman: "yislamo",
     options: ["Förlåt mig", "Grattis", "Tack / Välgjort", "Lycka till"],
     answer: 2,
-    note: "'Yislamu' är ett tack för ett fint arbete eller en gåva. Bokstavligen 'må du bevaras'."
+    note: "'Yislamo' är ett tack för ett fint arbete eller en gåva. Bokstavligen 'må du bevaras'."
   },
   {
     arabic: "هيدا",
@@ -396,30 +400,194 @@ const ALL_QUESTIONS = [
   },
   {
     arabic: "معي",
-    roman: "ma'i",
+    roman: "ma3i",
     options: ["Utan mig", "Mot mig", "Med mig / Jag har", "Från mig"],
     answer: 2,
-    note: "'Ma'i' betyder 'med mig' eller 'jag har'. 'Ma'i massari' = Jag har pengar."
+    note: "'Ma3i' betyder 'med mig' eller 'jag har'. 'Ma3i massari' = Jag har pengar."
   },
   {
     arabic: "تعبت",
-    roman: "ta'abt",
+    roman: "ta3abt",
     options: ["Jag sov", "Jag åt", "Jag tröttnade / Jag blev trött", "Jag kom"],
     answer: 2,
-    note: "'Ta'abt' är dåtidsformen — 'jag tröttnade' eller 'jag är slut nu'."
+    note: "'Ta3abt' är dåtidsformen — 'jag tröttnade' eller 'jag är slut nu'."
   },
   {
     arabic: "نامت",
-    roman: "nāmet",
+    roman: "namet",
     options: ["Hon åt", "Hon kom", "Hon sov", "Hon gick"],
     answer: 2,
-    note: "'Nāmet' betyder 'hon sov'. Maskulin form: 'nām' (han sov). Imperativ: 'nām' = sov!"
+    note: "'Namet' betyder 'hon sov'. Maskulin form: 'nam' (han sov). Imperativ: 'nam' = sov!"
   },
   {
     arabic: "طلعت",
-    roman: "ṭle'et",
+    roman: "6le3et",
     options: ["Jag kom in", "Jag åkte hem", "Jag gick ut", "Jag stannade"],
     answer: 2,
-    note: "'Ṭle'et' betyder 'jag gick ut'. 'Ṭle'' (imperativ) = gå ut / åk iväg."
+    note: "'6le3et' betyder 'jag gick ut'. '6la3' (imperativ) = gå ut / åk iväg."
+  },
+
+  // ── 23 nya ord ───────────────────────────────────────────────────────────────
+
+  {
+    arabic: "نسيت",
+    roman: "nsiit",
+    options: ["Jag hittade det", "Jag förstod", "Jag glömde", "Jag minns"],
+    answer: 2,
+    note: "'Nsiit' är dåtidsform av 'att glömma'. 'Nsiit el-mifta7' = Jag glömde nyckeln."
+  },
+  {
+    arabic: "وجع",
+    roman: "waja3",
+    options: ["Det kliar", "Det gör ont / Smärta", "Det är varmt", "Det är bra"],
+    answer: 1,
+    note: "'Waja3' betyder smärta eller 'det gör ont'. 'Waja3 ras' = huvudvärk (används också om en jobbig person)."
+  },
+  {
+    arabic: "كبير",
+    roman: "kbir",
+    options: ["Liten", "Ung", "Ny", "Stor / Gammal"],
+    answer: 3,
+    note: "'Kbir' betyder stor eller gammal (om personer). Motsatsen är 'zghir' (liten/ung)."
+  },
+  {
+    arabic: "زغير",
+    roman: "zghir",
+    options: ["Stor", "Gammal", "Lång", "Liten / Ung"],
+    answer: 3,
+    note: "'Zghir' betyder liten eller ung. Motsatsen är 'kbir' (stor/gammal)."
+  },
+  {
+    arabic: "حلو",
+    roman: "7elo",
+    options: ["Ful", "Tråkig", "Svår", "Vacker / Fin / Söt"],
+    answer: 3,
+    note: "'7elo' (mask.) / '7elwe' (fem.) betyder vacker, fin eller söt. '7elwe ktir!' = Väldigt vacker!"
+  },
+  {
+    arabic: "سريع",
+    roman: "sari3",
+    options: ["Sen", "Långsam", "Tidig", "Snabb"],
+    answer: 3,
+    note: "'Sari3' betyder snabb. 'Sari3 ktir!' = Väldigt snabb! Motsatsen är 'ba6i2' (långsam)."
+  },
+  {
+    arabic: "بطيء",
+    roman: "ba6i2",
+    options: ["Snabb", "Stark", "Tyst", "Långsam"],
+    answer: 3,
+    note: "'Ba6i2' betyder långsam. Motsatsen är 'sari3' (snabb). 'Ba6i2 ktir' = väldigt långsam."
+  },
+  {
+    arabic: "أكل",
+    roman: "akl",
+    options: ["Dryck", "Musik", "Kläder", "Mat / Ätande"],
+    answer: 3,
+    note: "'Akl' betyder mat eller ätande. 'El-akl mni7' = Maten är god. 'Wakt el-akl' = Mattid."
+  },
+  {
+    arabic: "ماي",
+    roman: "may",
+    options: ["Mjölk", "Juice", "Kaffe", "Vatten"],
+    answer: 3,
+    note: "'May' är det libanesiska ordet för vatten. Standardarabiska använder 'ma2'."
+  },
+  {
+    arabic: "بيت",
+    roman: "bayt",
+    options: ["Skola", "Butik", "Bil", "Hus / Hem"],
+    answer: 3,
+    note: "'Bayt' betyder hus eller hem. 'Ruu7 3a bayt' = Åk hem. 'Baytna' = Vårt hem."
+  },
+  {
+    arabic: "لازم",
+    roman: "lazem",
+    options: ["Förbjudet", "Valfritt", "Kanske", "Måste / Behöver"],
+    answer: 3,
+    note: "'Lazem' betyder måste eller behöver. 'Lazem truu7' = Du måste åka."
+  },
+  {
+    arabic: "ممكن",
+    roman: "mumkin",
+    options: ["Omöjligt", "Förbjudet", "Säkert", "Möjligt / Kan jag"],
+    answer: 3,
+    note: "'Mumkin' betyder möjligt eller 'kan jag'. 'Mumkin tsa3idni?' = Kan du hjälpa mig?"
+  },
+  {
+    arabic: "فرحان",
+    roman: "far7an",
+    options: ["Ledsen", "Trött", "Arg", "Glad / Upprymd"],
+    answer: 3,
+    note: "'Far7an' (mask.) / 'Far7ane' (fem.) betyder glad. 'Ana far7an ktir' = Jag är väldigt glad."
+  },
+  {
+    arabic: "عطشان",
+    roman: "3a6shan",
+    options: ["Hungrig", "Sömnig", "Mätt", "Törstig"],
+    answer: 3,
+    note: "'3a6shan' (mask.) / '3a6shame' (fem.) betyder törstig. 'Ana 3a6shan la may' = Jag är törstig på vatten."
+  },
+  {
+    arabic: "جوعان",
+    roman: "jou3an",
+    options: ["Törstig", "Mätt", "Sömnig", "Hungrig"],
+    answer: 3,
+    note: "'Jou3an' (mask.) / 'Jou3ane' (fem.) betyder hungrig. 'Ana jou3an ktir' = Jag är väldigt hungrig."
+  },
+  {
+    arabic: "إيمتى",
+    roman: "emta",
+    options: ["Varför", "Var", "Vem", "När"],
+    answer: 3,
+    note: "'Emta' är det libanesiska frågeordet för 'när'. 'Emta ra7 tiji?' = När kommer du?"
+  },
+  {
+    arabic: "بعدين",
+    roman: "ba3dein",
+    options: ["Innan", "Nu", "Aldrig", "Senare / Sedan"],
+    answer: 3,
+    note: "'Ba3dein' betyder senare eller sedan. 'Ba3dein bshoufak' = Jag ser dig senare."
+  },
+  {
+    arabic: "دايماً",
+    roman: "daymen",
+    options: ["Ibland", "Aldrig", "Sällan", "Alltid"],
+    answer: 3,
+    note: "'Daymen' betyder alltid. 'Daymen mni7' = Alltid bra. Standardarabiska: 'da2iman'."
+  },
+  {
+    arabic: "صديق",
+    roman: "sadeek",
+    options: ["Fiende", "Familj", "Granne", "Vän / Kompis"],
+    answer: 3,
+    note: "'Sadeek' (mask.) / 'Sadee2a' (fem.) betyder vän. 'Sadeeki' = min vän."
+  },
+  {
+    arabic: "غالي",
+    roman: "ghali",
+    options: ["Billig", "Vanlig", "Gammal", "Dyr / Dyrbar"],
+    answer: 3,
+    note: "'Ghali' betyder dyr eller dyrbar. 'Ghali ktir' = för dyrt. 'Inta ghali 3aleyyi' = Du är dyrbar för mig."
+  },
+  {
+    arabic: "رخيص",
+    roman: "r5ees",
+    options: ["Dyr", "Ny", "Gammal", "Billig"],
+    answer: 3,
+    note: "'R5ees' betyder billig. Motsatsen är 'ghali' (dyr). 'R5ees ktir' = väldigt billigt."
+  },
+  {
+    arabic: "نضيف",
+    roman: "ndeef",
+    options: ["Smutsig", "Rörig", "Gammal", "Ren / Snygg"],
+    answer: 3,
+    note: "'Ndeef' (mask.) / 'Ndeefe' (fem.) betyder ren eller snygg. 'El-bayt ndeef' = Huset är rent."
+  },
+  {
+    arabic: "وسخ",
+    roman: "was5",
+    options: ["Ren", "Ny", "Fin", "Smutsig"],
+    answer: 3,
+    note: "'Was5' (mask.) / 'Was5a' (fem.) betyder smutsig. Motsatsen är 'ndeef' (ren)."
   }
 ];
