@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lebanese Arabic Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cedar: #8B2635;
+    --gold: #C9963A;
+    --cream: #FAF3E8;
+    --dark: #1A1209;
+    --soft: #EDE3D4;
+    --correct: #2D6A4F;
+    --wrong: #8B2635;
+    --muted: #7A6B55;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Mono', monospace;
+    color: var(--dark);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(139,38,53,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(201,150,58,0.1) 0%, transparent 50%);
+  }
+
+  header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    border-bottom: 2px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '🇱🇧';
+    position: absolute;
+    font-size: 120px;
+    opacity: 0.04;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--cedar);
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  header p {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .progress-bar-wrap {
+    background: var(--soft);
+    height: 6px;
+    margin: 0;
+  }
+  .progress-bar {
+    height: 6px;
+    background: linear-gradient(90deg, var(--cedar), var(--gold));
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .quiz-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .score-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--soft);
+  }
+
+  .score-display span b {
+    color: var(--cedar);
+    font-size: 1.1rem;
+  }
+
+  .question-card {
+    background: white;
+    border: 1.5px solid var(--soft);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 16px;
+    box-shadow: 4px 4px 0 var(--soft);
+    animation: slideIn 0.3s ease;
+    display: none;
+  }
+
+  .question-card.active { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .arabic-word {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    color: var(--cedar);
+    text-align: center;
+    padding: 20px 0 8px;
+    direction: rtl;
+    line-height: 1.3;
+  }
+
+  .romanized {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .option-btn {
+    background: var(--cream);
+    border: 1.5px solid var(--soft);
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--dark);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s ease;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: #FFF9F0;
+    transform: translateY(-1px);
+    box-shadow: 2px 2px 0 var(--gold);
+  }
+
+  .option-btn.correct {
+    background: #EAF4EE;
+    border-color: var(--correct);
+    color: var(--correct);
+    font-weight: 500;
+  }
+
+  .option-btn.wrong {
+    background: #F9EAEC;
+    border-color: var(--wrong);
+    color: var(--wrong);
+    text-decoration: line-through;
+    opacity: 0.8;
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 18px;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    display: none;
+    line-height: 1.5;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: #EAF4EE; color: var(--correct); border-left: 3px solid var(--correct); }
+  .feedback.wrong-fb { background: #F9EAEC; color: var(--wrong); border-left: 3px solid var(--wrong); }
+
+  .nav-btn {
+    margin-top: 24px;
+    background: var(--cedar);
+    color: var(--cream);
+    border: none;
+    padding: 14px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    display: none;
+    transition: all 0.2s ease;
+  }
+
+  .nav-btn:hover { background: var(--dark); }
+  .nav-btn.show { display: inline-block; }
+
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    background: white;
+    border: 1.5px solid var(--soft);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--soft);
+  }
+
+  .result-screen.show { display: block; }
+
+  .result-emoji { font-size: 4rem; margin-bottom: 16px; }
+
+  .result-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--cedar);
+    margin-bottom: 12px;
+  }
+
+  .final-score {
+    font-size: 3.5rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    margin: 16px 0;
+  }
+
+  .result-screen p { color: var(--muted); font-size: 0.88rem; letter-spacing: 0.5px; }
+
+  .share-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .share-btn {
+    border: none;
+    padding: 14px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .share-btn-whatsapp {
+    background: #25D366;
+    color: white;
+  }
+  .share-btn-whatsapp:hover { background: #1da851; }
+
+  .share-btn-general {
+    background: var(--cedar);
+    color: var(--cream);
+  }
+  .share-btn-general:hover { background: var(--dark); }
+
+  .restart-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--soft);
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 16px;
+    transition: all 0.2s ease;
+  }
+  .restart-btn:hover { border-color: var(--gold); color: var(--dark); }
+
+  .answer-sheet {
+    margin-top: 32px;
+    text-align: left;
+  }
+
+  .answer-sheet h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cedar);
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--soft);
+  }
+
+  .answer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--soft);
+    font-size: 0.82rem;
+    gap: 12px;
+  }
+
+  .answer-row .aw { direction: rtl; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cedar); min-width: 60px; }
+  .answer-row .ar { color: var(--muted); flex: 1; }
+  .answer-row .ac { color: var(--correct); font-weight: 500; flex: 1; }
+  .answer-row .tick { font-size: 1rem; }
+
+  @media (max-width: 480px) {
+    .options { grid-template-columns: 1fr; }
+    .answer-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Lebanese Arabic Quiz</h1>
+  <p id="dayLabel">15 everyday words from the levant</p>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="quiz-container">
+  <div class="score-display">
+    <span>Question <b id="qNum">1</b> of 15</span>
+    <span>Score: <b id="scoreNum">0</b></span>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🌲</div>
+    <h2 id="resultTitle">Quiz Complete!</h2>
+    <div class="final-score" id="finalScore">0 / 15</div>
+    <p id="resultMsg"></p>
+
+    <div class="share-buttons">
+      <button class="share-btn share-btn-whatsapp" onclick="shareWhatsApp()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </button>
+      <button class="share-btn share-btn-general" onclick="shareGeneral()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Dela via...
+      </button>
+    </div>
+
+    <button class="restart-btn" onclick="restartQuiz()">Försök igen</button>
+
+    <div class="answer-sheet" id="answerSheet">
+      <h3>Answer Key</h3>
+      <div id="answerRows"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Word Bank (70 words) ─────────────────────────────────────────────────────
+// Phonetics use Lebanese chat alphabet: 2=ء/ق, 3=ع, 5=خ, 6=ط, 7=ح, 9=ق
+
+const wordBank = [
+  // Greetings & social
+  { arabic: "يلّا",           roman: "yalla",           meaning: "Let's go / Come on",          note: "One of the most-used Lebanese words — 'yalla' means let's go, come on, or hurry up." },
+  { arabic: "كيفك",           roman: "kifak",           meaning: "How are you?",                 note: "'Kifak' (m.) / 'Kifik' (f.) — the classic Lebanese greeting." },
+  { arabic: "أهلاً",          roman: "ahlan",           meaning: "Welcome / Hello",              note: "'Ahlan' is a warm greeting, short for 'ahlan w sahlan'." },
+  { arabic: "شكراً",          roman: "shukran",         meaning: "Thank you",                    note: "'Shukran' — the standard thank you, widely used in Lebanese." },
+  { arabic: "عفواً",          roman: "3afwan",          meaning: "You're welcome / Excuse me",   note: "'3afwan' is both 'you're welcome' and a polite 'excuse me'." },
+  { arabic: "مبروك",          roman: "mabrook",         meaning: "Congratulations",              note: "'Mabrook' is used for all happy occasions — birthdays, weddings, new jobs." },
+  { arabic: "صباح الخير",     roman: "saba7 el-kheir",  meaning: "Good morning",                 note: "Literally 'morning of goodness'. The reply is 'saba7 el-noor'." },
+  { arabic: "مسا الخير",      roman: "masa el-kheir",   meaning: "Good evening",                 note: "Literally 'evening of goodness'. Reply: 'masa el-noor'." },
+  { arabic: "يسلمو",          roman: "yislamo",         meaning: "Bless your hands / Thank you", note: "'Yislamo' — 'may your hands be blessed'. Said after someone does something for you." },
+  { arabic: "صحتين",          roman: "sa7ten",          meaning: "Cheers / To your health",      note: "'Sa7ten' literally means 'two healths'. Said as a toast or after someone finishes eating." },
+  { arabic: "تصبح على خير",   roman: "tsba7 3a kheir",  meaning: "Good night",                   note: "Literally 'may you wake to goodness'. Reply: 'w inta min ahl el-kheir'." },
+  { arabic: "من فضلك",        roman: "min fadlak",      meaning: "Please",                       note: "'Min fadlak' (m.) / 'min fadlik' (f.) = please. Very polite." },
+
+  // Question words
+  { arabic: "شو",             roman: "shu",             meaning: "What",                         note: "'Shu' is Lebanese for 'what'. 'Shu baddak?' = What do you want?" },
+  { arabic: "وين",            roman: "wayn",            meaning: "Where",                        note: "'Wayn' means 'where'. 'Wayn raye7?' = Where are you going?" },
+  { arabic: "ليش",            roman: "lesh",            meaning: "Why",                          note: "'Lesh' means 'why'. 'Lesh hek?' = Why like this?" },
+  { arabic: "مين",            roman: "meen",            meaning: "Who",                          note: "'Meen' means 'who'. 'Meen huwwe?' = Who is he?" },
+  { arabic: "قديش",           roman: "addeish",         meaning: "How much / How many",          note: "'Addeish' means how much or many. Used when shopping or asking quantities." },
+  { arabic: "إيمتى",          roman: "emta",            meaning: "When",                         note: "'Emta' means 'when'. 'Emta ra7 tiji?' = When will you come?" },
+
+  // Time
+  { arabic: "هلق",            roman: "halla2",          meaning: "Now",                          note: "'Halla2' means 'now'. Equivalent of MSA 'al-ān'." },
+  { arabic: "بكرا",           roman: "bukra",           meaning: "Tomorrow",                     note: "'Bukra' means tomorrow. 'Bukra inshallah' is a famously optimistic phrase." },
+  { arabic: "مبارح",          roman: "mbare7",          meaning: "Yesterday",                    note: "'Mbare7' means yesterday. 'Shu 3milt mbare7?' = What did you do yesterday?" },
+  { arabic: "دايماً",         roman: "daymen",          meaning: "Always",                       note: "'Daymen' means always. 'Daymen mni7' = always good." },
+  { arabic: "بعدين",          roman: "ba3dein",         meaning: "Later / After",                note: "'Ba3dein' means later or after. 'Ba3dein bshoufak' = I'll see you later." },
+
+  // Feelings & states
+  { arabic: "منيح",           roman: "mni7",            meaning: "Good / Fine",                  note: "'Mni7' means good or fine. A common reply to 'Kifak?'." },
+  { arabic: "تعبان",          roman: "ta3ban",          meaning: "Tired / Sick",                 note: "'Ta3ban' means tired or unwell. 'Ana ta3ban' = I'm tired." },
+  { arabic: "جوعان",          roman: "jou3an",          meaning: "Hungry",                       note: "'Jou3an' means hungry. 'Ana jou3an ktir' = I'm very hungry." },
+  { arabic: "عطشان",          roman: "3atshan",         meaning: "Thirsty",                      note: "'3atshan' means thirsty. 'Ana 3atshan la may' = I'm thirsty for water." },
+  { arabic: "زعلان",          roman: "za3lan",          meaning: "Upset / Angry",                note: "'Za3lan' means upset or annoyed. 'Shu za3lanak?' = What upset you?" },
+  { arabic: "فرحان",          roman: "far7an",          meaning: "Happy / Excited",              note: "'Far7an' means happy. 'Ana far7an ktir' = I'm very happy." },
+  { arabic: "خايف",           roman: "5ayef",           meaning: "Scared / Afraid",              note: "'5ayef' means scared. '5ayef men shu?' = Scared of what?" },
+  { arabic: "وجع",            roman: "waja3",           meaning: "Pain / It hurts",              note: "'Waja3' means pain or it hurts. 'Waja3 ras' = headache (also used for 'annoying person')." },
+  { arabic: "خجلان",          roman: "5ajlan",          meaning: "Shy / Embarrassed",            note: "'5ajlan' means shy or embarrassed. '5ajlana menna' = embarrassed about it." },
+
+  // Descriptors
+  { arabic: "كتير",           roman: "ktir",            meaning: "A lot / Very",                 note: "'Ktir mni7' = very good. One of the most versatile Lebanese words." },
+  { arabic: "شوي",            roman: "shwayy",          meaning: "A little / Slowly",            note: "'Shwayy shwayy' = little by little, take it easy." },
+  { arabic: "كبير",           roman: "kbir",            meaning: "Big / Old",                    note: "'Kbir' means big or old (for people). Opposite of 'zghir'." },
+  { arabic: "زغير",           roman: "zghir",           meaning: "Small / Young",                note: "'Zghir' means small or young. Opposite of 'kbir'." },
+  { arabic: "حلو",            roman: "7elo",            meaning: "Beautiful / Sweet / Nice",      note: "'7elo' is used for beauty, sweetness, or niceness. '7elwe ktir!' = so beautiful!" },
+  { arabic: "شاطر",           roman: "sha6er",          meaning: "Clever / Smart",               note: "'Sha6er' means clever. Parents often say it to praise children." },
+  { arabic: "كسلان",          roman: "kaslan",          meaning: "Lazy",                         note: "'Kaslan' means lazy. 'La tkon kaslan!' = Don't be lazy!" },
+  { arabic: "سريع",           roman: "sari3",           meaning: "Fast / Quick",                 note: "'Sari3' means fast. 'Sari3 ktir!' = very fast!" },
+  { arabic: "بطيء",           roman: "bati2",           meaning: "Slow",                         note: "'Bati2' means slow. Opposite of 'sari3'." },
+  { arabic: "حر",             roman: "7ar",             meaning: "Hot",                          note: "'7ar' means hot. '7ar ktir lyom!' = It's very hot today!" },
+  { arabic: "برد",            roman: "bard",            meaning: "Cold",                         note: "'Bard' means cold. 'El-jaww bard' = the weather is cold." },
+  { arabic: "نضيف",           roman: "ndeef",           meaning: "Clean / Tidy",                 note: "'Ndeef' means clean. 'El-bayt ndeef' = the house is clean." },
+  { arabic: "وسخ",            roman: "wasikh",          meaning: "Dirty",                        note: "'Wasikh' means dirty. Opposite of 'ndeef'." },
+  { arabic: "غالي",           roman: "ghali",           meaning: "Expensive / Precious",         note: "'Ghali' means expensive or precious. 'Ghali ktir' = too expensive." },
+  { arabic: "رخيص",           roman: "r5ees",           meaning: "Cheap",                        note: "'R5ees' means cheap. Opposite of 'ghali'." },
+
+  // People & pronouns
+  { arabic: "أنا",            roman: "ana",             meaning: "I / Me",                       note: "'Ana' means 'I'. 'Ana mni7' = I'm good." },
+  { arabic: "إنت",            roman: "inta",            meaning: "You (male)",                   note: "'Inta' (m.) / 'Inti' (f.) means 'you'. Very common in conversation." },
+  { arabic: "حبيبي",          roman: "7abibi",          meaning: "My dear / My love",            note: "'7abibi' (m.) / '7abibti' (f.) — used affectionately between friends, not just romantic partners." },
+  { arabic: "أهل",            roman: "ahl",             meaning: "Family",                       note: "'Ahl' means family. A core part of Lebanese culture." },
+  { arabic: "صديق",           roman: "sadeek",          meaning: "Friend",                       note: "'Sadeek' means friend. 'Sadeeki' = my friend." },
+
+  // Commands & actions
+  { arabic: "عنجد",           roman: "3anjad",          meaning: "Really? / Seriously?",         note: "'3anjad' means 'really' or 'seriously'. Used as both a statement and a question." },
+  { arabic: "بدّي",           roman: "baddi",           meaning: "I want",                       note: "'Baddi' means 'I want'. 'Baddak' = you want, 'baddha' = she wants." },
+  { arabic: "مش",             roman: "mish",            meaning: "Not / Isn't",                  note: "'Mish' is the negation prefix. 'Mish mni7' = not good." },
+  { arabic: "فوت",            roman: "fut",             meaning: "Come in / Enter",              note: "'Fut' means 'come in'. 'Fut la jouwwa' = come inside." },
+  { arabic: "روق",            roman: "ruu2",            meaning: "Calm down / Chill",            note: "'Ruu2' means relax or calm down. 'Ruu2 shwayy' = chill out a bit." },
+  { arabic: "خلص",            roman: "5alas",           meaning: "Done / Finished / Enough",     note: "'5alas' means finished or 'that's it'. '5alas, mish baddi' = enough, I don't want." },
+  { arabic: "روح",            roman: "ruu7",            meaning: "Go / Leave",                   note: "'Ruu7' means go or leave. 'Ruu7 3a bayt' = go home." },
+  { arabic: "شوف",            roman: "shuuf",           meaning: "Look / See",                   note: "'Shuuf' means look or see. 'Shuuf shu 3amlo!' = Look what they did!" },
+  { arabic: "إسمع",           roman: "esma3",           meaning: "Listen / Hear",                note: "'Esma3' means listen. 'Esma3 mni7' = listen carefully." },
+  { arabic: "نسيت",           roman: "nsiit",           meaning: "I forgot",                     note: "'Nsiit' means 'I forgot'. 'Nsiit el-mifta7' = I forgot the key." },
+
+  // Useful expressions
+  { arabic: "لأ",             roman: "la2",             meaning: "No",                           note: "'La2' is the Lebanese 'no', with a glottal stop at the end." },
+  { arabic: "إي",             roman: "ee",              meaning: "Yes (informal)",               note: "'Ee' or 'ah' — informal yes. More formal: 'na3am'." },
+  { arabic: "بس",             roman: "bas",             meaning: "But / Just / Enough",          note: "'Bas' has several meanings: 'but', 'just', or 'enough'. Context determines which." },
+  { arabic: "كمان",           roman: "kaman",           meaning: "Also / Too",                   note: "'Kaman' means 'also' or 'too'. 'Ana kaman' = me too." },
+  { arabic: "يعني",           roman: "ya3ni",           meaning: "Kind of / I mean / Like",      note: "'Ya3ni' is extremely common — used like 'I mean', 'so', 'kind of', or 'you know'." },
+  { arabic: "إنشالله",        roman: "inshallah",       meaning: "God willing / Hopefully",      note: "'Inshallah' is used everywhere — from sincere hopes to polite deflections." },
+  { arabic: "طيب",            roman: "tayyeb",          meaning: "Okay / Alright",               note: "'Tayyeb' means okay or alright. Used to agree or move on in conversation." },
+  { arabic: "معلوم",          roman: "ma3loom",         meaning: "Of course / Obviously",        note: "'Ma3loom' means 'of course'. 'Ma3loom bya3ref' = of course he knows." },
+  { arabic: "ما بعرف",        roman: "ma ba3ref",       meaning: "I don't know",                 note: "'Ma ba3ref' = I don't know. One of the most useful phrases!" },
+  { arabic: "لازم",           roman: "lazem",           meaning: "Must / Need to",               note: "'Lazem' means must or necessary. 'Lazem truu7' = you must go." },
+  { arabic: "ممكن",           roman: "mumkin",          meaning: "Possible / Can I / Maybe",     note: "'Mumkin' means possible. 'Mumkin tsa3idni?' = Can you help me?" },
+  { arabic: "هيدا",           roman: "hayda",           meaning: "This (masculine)",             note: "'Hayda' = this (m.), 'Haydi' = this (f.). 'Hayda shu?' = What is this?" },
+  { arabic: "هيك",            roman: "heyk",            meaning: "Like this / That way",         note: "'Heyk' means 'like this' or 'in that way'. 'Lesh heyk?' = Why like this?" },
+  { arabic: "وقت",            roman: "wa2t",            meaning: "Time",                         note: "'Wa2t' means time. 'Mafi wa2t' = there's no time." },
+  { arabic: "أكل",            roman: "akl",             meaning: "Food",                         note: "'Akl' means food. 'El-akl mni7' = the food is good." },
+  { arabic: "ماي",            roman: "may",             meaning: "Water",                        note: "'May' means water in Lebanese. MSA uses 'ma2'." },
+  { arabic: "بيت",            roman: "bayt",            meaning: "House / Home",                 note: "'Bayt' means house or home. 'Ruu7 3a bayt' = go home." },
+];
+
+// ─── Seeded RNG (mulberry32) ──────────────────────────────────────────────────
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function dateSeed() {
+  const d = new Date();
+  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+
+function seededShuffle(arr, rng) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ─── Daily question generation ────────────────────────────────────────────────
+
+function getTodaysQuestions() {
+  const seed = dateSeed();
+
+  // Pick 15 words for today
+  const todaysWords = seededShuffle(wordBank, mulberry32(seed)).slice(0, 15);
+
+  return todaysWords.map((word, idx) => {
+    // Pick 3 wrong answers deterministically per question
+    const others = wordBank.filter(w => w.arabic !== word.arabic);
+    const wrongPool = seededShuffle(others, mulberry32(seed + idx * 97 + 1));
+    const wrongs = wrongPool.slice(0, 3).map(w => w.meaning);
+
+    // Shuffle the 4 options deterministically
+    const options = seededShuffle([word.meaning, ...wrongs], mulberry32(seed + idx * 97 + 2));
+
+    return {
+      arabic: word.arabic,
+      roman:  word.roman,
+      question: `What does ${word.arabic} (${word.roman}) mean?`,
+      options:  options,
+      answer:   options.indexOf(word.meaning),
+      note:     word.note
+    };
+  });
+}
+
+// ─── Quiz state ───────────────────────────────────────────────────────────────
+
+let questions = getTodaysQuestions();
+let current  = 0;
+let score    = 0;
+let answered = false;
+
+// ─── Day label ────────────────────────────────────────────────────────────────
+
+(function setDayLabel() {
+  const d = new Date();
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('dayLabel').textContent =
+    d.toLocaleDateString('sv-SE', opts).toUpperCase();
+})();
+
+// ─── Build quiz DOM ───────────────────────────────────────────────────────────
+
+function buildQuiz() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card' + (i === 0 ? ' active' : '');
+    card.id = `card-${i}`;
+    const isLast = i === questions.length - 1;
+    card.innerHTML = `
+      <div class="q-number">Question ${i + 1} of ${questions.length}</div>
+      <div class="arabic-word">${q.arabic}</div>
+      <div class="romanized">${q.roman}</div>
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:16px;">${q.question}</p>
+      <div class="options">
+        ${q.options.map((opt, j) => `
+          <button class="option-btn" onclick="answer(${i}, ${j})" id="opt-${i}-${j}">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${i}"></div>
+      <button class="nav-btn" id="next-${i}" onclick="nextQuestion()">${isLast ? 'Se resultat' : 'Nästa fråga →'}</button>
+    `;
+    area.appendChild(card);
+  });
+}
+
+// ─── Answer & navigation ──────────────────────────────────────────────────────
+
+function answer(qIdx, optIdx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[qIdx];
+  const correct = q.answer;
+
+  for (let j = 0; j < q.options.length; j++) {
+    const btn = document.getElementById(`opt-${qIdx}-${j}`);
+    btn.disabled = true;
+    if (j === correct) btn.classList.add('correct');
+    else if (j === optIdx && optIdx !== correct) btn.classList.add('wrong');
+  }
+
+  const fb = document.getElementById(`fb-${qIdx}`);
+  if (optIdx === correct) {
+    score++;
+    document.getElementById('scoreNum').textContent = score;
+    fb.className = 'feedback show correct-fb';
+    fb.textContent = `✓ Correct! ${q.note}`;
+  } else {
+    fb.className = 'feedback show wrong-fb';
+    fb.textContent = `✗ The answer is "${q.options[correct]}". ${q.note}`;
+  }
+
+  document.getElementById(`next-${qIdx}`).classList.add('show');
+  updateProgress();
+}
+
+function nextQuestion() {
+  document.getElementById(`card-${current}`).classList.remove('active');
+  current++;
+  answered = false;
+
+  if (current >= questions.length) {
+    showResults();
+    return;
+  }
+
+  document.getElementById(`card-${current}`).classList.add('active');
+  document.getElementById('qNum').textContent = current + 1;
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = ((current + (answered ? 1 : 0)) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ─── Results ──────────────────────────────────────────────────────────────────
+
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.querySelector('.score-display').style.display = 'none';
+  document.getElementById('resultScreen').classList.add('show');
+
+  const pct = score / questions.length;
+  let emoji, title, msg;
+  if (pct === 1)       { emoji = '🌲'; title = 'Ahla w sahla!';     msg = 'Perfect score! You could pass for Lebanese.'; }
+  else if (pct >= 0.8) { emoji = '🎉'; title = 'Ktir mni7!';       msg = 'Very good! You know Lebanese well.'; }
+  else if (pct >= 0.6) { emoji = '👏'; title = 'Mni7!';            msg = 'Not bad at all. Keep practising!'; }
+  else if (pct >= 0.4) { emoji = '📖'; title = 'Yalla, study more!'; msg = 'You know some words. More practice needed.'; }
+  else                 { emoji = '😅'; title = 'La2, la2, la2...'; msg = 'Lebanese Arabic is tricky — try again!'; }
+
+  document.getElementById('resultEmoji').textContent  = emoji;
+  document.getElementById('resultTitle').textContent  = title;
+  document.getElementById('finalScore').textContent   = `${score} / ${questions.length}`;
+  document.getElementById('resultMsg').textContent    = msg;
+  document.getElementById('progressBar').style.width  = '100%';
+
+  document.getElementById('answerRows').innerHTML = questions.map(q => `
+    <div class="answer-row">
+      <span class="aw">${q.arabic}</span>
+      <span class="ar">${q.roman}</span>
+      <span class="ac">${q.options[q.answer]}</span>
+    </div>
+  `).join('');
+}
+
+// ─── Share ────────────────────────────────────────────────────────────────────
+
+function buildShareText() {
+  const d = new Date();
+  const dateStr = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
+  return `Jag fick ${score}/${questions.length} på Libanesisk Arabiska Quiz (${dateStr})! 🇱🇧`;
+}
+
+function shareWhatsApp() {
+  const text = encodeURIComponent(`${buildShareText()}\n${window.location.href}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+async function shareGeneral() {
+  const text = buildShareText();
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Lebanese Arabic Quiz', text, url: window.location.href });
+    } catch (_) { /* user cancelled */ }
+  } else {
+    try {
+      await navigator.clipboard.writeText(`${text} ${window.location.href}`);
+      alert('Kopierat till urklipp!');
+    } catch (_) {
+      prompt('Kopiera och dela:', `${text} ${window.location.href}`);
+    }
+  }
+}
+
+// ─── Restart ──────────────────────────────────────────────────────────────────
+
+function restartQuiz() {
+  current  = 0;
+  score    = 0;
+  answered = false;
+  document.getElementById('scoreNum').textContent = 0;
+  document.getElementById('qNum').textContent     = 1;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.querySelector('.score-display').style.display = 'flex';
+  buildQuiz();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
+buildQuiz();
+</script>
+</body>
+</html>
